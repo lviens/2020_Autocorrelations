@@ -35,7 +35,7 @@ def getIndexPositions(listOfElements, element):
 dir_ini = './'
 sys.path.append(dir_ini)
 #%% Directory with station info, Kanto basin depth, earthquake lists,...
-directory = '../Data/Others/'
+directory = '../Data/Other_data/'
 
 #%% Load station names, latitude, and longitude
 crs = open(directory + "/MeSOnet_channel_file", "r")
