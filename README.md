@@ -1,4 +1,4 @@
-# Codes to compute noise autocorrelation functions (ACFs)
+# Python codes to compute noise autocorrelation functions (ACFs)
 
 The manuscript has been submitted for publication, a pre-print version is available here.
 
