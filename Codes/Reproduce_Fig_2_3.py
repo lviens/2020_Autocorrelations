@@ -22,6 +22,8 @@ import geopy
 from geopy.distance import  geodesic
 from scipy.interpolate import griddata
 from matplotlib.patches import Polygon
+import os
+from zipfile import ZipFile
 #%%
 def butter_bandpass_filter(data, lowcut, highcut, fs, order = 4):
     '''
@@ -45,9 +47,24 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order = 4):
     b, a = butter(order, [low, high], btype='band')
     y = filtfilt(b, a, data)
     return y
+#%% Unzip the data
+
+dir_meta = '../Data/Other_data/'
+if not os.path.exists(dir_meta):
+    zf = ZipFile('../Data/Other_data.zip', 'r')
+    zf.extractall('../Data/')
+    zf.close()
+    
+dir_data = '../Data/ACFs/'
+if not os.path.exists(dir_data):
+    zf = ZipFile('../Data/ACFs.zip', 'r')
+    zf.extractall('../Data/')
+    zf.close()
 
 #%% Directory with all the data and metadata
 data_dir = '../Data/'
+
+
 
 #%% Main parameter to plot the data along different Lines
 Line_nb = '4' # Possible values are 1, 2, 3, or 4 (str)

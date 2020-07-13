@@ -19,6 +19,7 @@ This is just an example with 3 days of data for one station, more data are used 
 """
 
 import os
+from zipfile import ZipFile
 import sys
 import numpy as np
 from scipy.signal import butter, filtfilt, hilbert, hann
@@ -145,6 +146,12 @@ def ACF_func(data, dt, timesave):
 dir_ini = './'
 sys.path.append(dir_ini)
 directory ='../Data/Raw/' # data directory (The full folder + file name is defined Line 177 )
+if not os.path.exists(directory):
+    zf = ZipFile('../Data/Raw.zip', 'r')
+    zf.extractall('../Data/')
+    zf.close()
+
+
 sta = ['E.AYHM'] # Station name
 
 year = '2019'

@@ -13,6 +13,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 from matplotlib.patches import Polygon
+import os
+from zipfile import ZipFile
+
 
 #%% Used to reshape the file with the Kanto Basin latitude, longitude, and depth info
 def getIndexPositions(listOfElements, element):
@@ -36,6 +39,10 @@ dir_ini = './'
 sys.path.append(dir_ini)
 #%% Directory with station info, Kanto basin depth, earthquake lists,...
 directory = '../Data/Other_data/'
+if not os.path.exists(directory):
+    zf = ZipFile('../Data/Other_data.zip', 'r')
+    zf.extractall('../Data/')
+    zf.close()
 
 #%% Load station names, latitude, and longitude
 crs = open(directory + "/MeSOnet_channel_file", "r")
