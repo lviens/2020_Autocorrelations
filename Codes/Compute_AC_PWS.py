@@ -19,7 +19,6 @@ This is just an example with 3 days of data for one station, more data are used 
 """
 
 import os
-from zipfile import ZipFile
 import sys
 import numpy as np
 from scipy.signal import butter, filtfilt, hilbert, hann
@@ -146,16 +145,10 @@ def ACF_func(data, dt, timesave):
 dir_ini = './'
 sys.path.append(dir_ini)
 directory ='../Data/Raw/' # data directory (The full folder + file name is defined Line 177 )
-if not os.path.exists(directory):
-    zf = ZipFile('../Data/Raw.zip', 'r')
-    zf.extractall('../Data/')
-    zf.close()
-
-
 sta = ['E.AYHM'] # Station name
 
 year = '2019'
-dy = ["%.3d" % i for i in range(1,4)] # Compute 20-min ACFs over 3 days of data (January 1st to 3rd, 2019)
+dy = ["%.3d" % i for i in range(182,184)] # Compute 20-min ACFs over 2 days of data (July 1st to 2nd, 2019)
 
 cmpo1 = 'U' # Vertical component
 timesave = 20 # save ACFs from -timesave to +timesave (in seconds)
@@ -195,24 +188,23 @@ for rec in sta: # Loop over the stations
                     corr = ACF_func(ab, dt, timesave) # Compute ACFs
                     ZZcorr.append(corr) # Save the ACF in a list
 
- #%% Compute PWS for the ACFs in ZZcorr
+    #%% Compute PWS for the ACFs in ZZcorr
     delta = 1/dt # Sampling frequency from sampling rate
     ZZcorr = np.array(ZZcorr) # List to NP array
     mxv = np.empty(len(ZZcorr)) # Initiate array for maximum values
     for i in range(ZZcorr.shape[0]):
         ZZcorr[i] = ZZcorr[i] - np.mean(ZZcorr[i]) # Remove mean of the ACF
-        ZZcorr[i,:half_len] = ZZcorr[i,:half_len] * hann2[:half_len] # Taper end of anticausal ACFs
-        ZZcorr[i,-half_len:] = ZZcorr[i,-half_len:] * hann2[-half_len:] # Taper end of causal ACFs
+        ZZcorr[i, :half_len] = ZZcorr[i,:half_len] * hann2[:half_len] # Taper end of anticausal ACFs
+        ZZcorr[i, -half_len:] = ZZcorr[i,-half_len:] * hann2[-half_len:] # Taper end of causal ACFs
         ZZcorr[i] = butter_bandpass_filter(ZZcorr[i], lowcut= filtlow, highcut = filthigh, fs = delta, order = 4) # Filter
         ZZcorr[i] = ZZcorr[i] - np.mean(ZZcorr[i])  # Remove mean of the ACF
-        mxv[i] = np.max(ZZcorr[i]) # Compute the maximum value of each ACF
+        mxv[i] = np.max(np.abs(ZZcorr[i])) # Compute the maximum value of each ACF
 
     valup = np.mean(mxv) + np.std(mxv) # Compute the metric used to remove ACFs with strong amplitudes
-    data_F = np.squeeze(np.array(ZZcorr[np.where(mxv[mxv<valup]),:])) # Select the data with maximum amplitudes lower than the metric
+    data_F = ZZcorr[mxv < valup]
     ZZcorrf = pws(arr = data_F, sampling_freq = delta, power = pwer, pws_timegate = pws_timegate ) # Compute the PWS
 
-
-#%% Plot the data
+    #%% Plot the data
     t = np.linspace(-len(ZZcorrf)/2*1/delta,len(ZZcorrf)/2*1/delta, len(ZZcorrf)) # Time vector for the ACFs
     
     plt.figure(figsize =(6,7))
@@ -225,7 +217,7 @@ for rec in sta: # Loop over the stations
     plt.grid(linewidth = 0.5)
     
     plt.subplot(212)
-    plt.plot(t,np.squeeze(np.mean(ZZcorr,axis=0)), linewidth =2)
+    plt.plot(t,ZZcorrf, linewidth = 2)
     plt.xlim(-timesave,timesave)
     plt.xlabel('Time (s)')
     plt.ylabel('Amplitude')
