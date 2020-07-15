@@ -10,6 +10,6 @@ The manuscript has been submitted for publication, a pre-print version is availa
   - **Reproduce_Fig_4.py** to reproduce Figure 4 of the paper (Maps of the Kanto Basin basin depth).
 
 * The **Data** folder contains:
-  - Four zip files with all the data needed to run the codes and reproduce the figures of the paper. The codes unzip the data automatically
+  - Four zip files with all the data needed to run the codes and reproduce the figures of the paper. The codes should unzip the zip files automatically.
 
-* The **Figures** folder contains the figures from the four codes. 
+* The **Figures** folder contains the 7 figures that can be plotted by the 4 codes. 
