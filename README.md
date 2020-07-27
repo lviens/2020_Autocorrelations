@@ -24,13 +24,16 @@ The manuscript has been submitted for publication, a pre-print version is availa
 
 
 * The **Reproduce_Fig_1.py** code outputs a map of the Kanto Basin with the MeSO-net station locations, the JIVSM model, and the four different lines used in this study. The code also plots an azimuthal equidistant projection map centered on the Kanto Basin including all the Mw 6+ earthquakes which occurred within 30 and 95 degrees from the Kanto Basin between May 2017 and 2020.
-
+<p align="center">
 <img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/Fig_1.png" width=60%>
-
+</p>
 
 * The **Reproduce_Fig_2_3.py** is used to plot the noise and earthquake ACFs along the 4 lines. The Figure below shows the ACFs along Line 1. 
+<p align="center">
 <img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/Line_1.png" width=60%>
-
+</p>
 
 * The **Reproduce_Fig_4.py** compares the bedrock depths from the JIVSM, noise ACF, and earthquake ACF measurements. 
+<p align="center">
 <img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/Fig_4.png" width=60%>
+</p>
