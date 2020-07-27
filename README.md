@@ -17,6 +17,12 @@ The manuscript has been submitted for publication, a pre-print version is availa
 
 ## Example:
 
+* The **Compute_AC_PWS.py** code processes two days of continuous records at the AYMH station and computes the PWS of the 30-min ACFs. For the two days of data, the 20-min ACFs are relatively consistent. Note that we use 1 month of data in the paper. 
+<img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/ACF_example.png" width=75%>
+
+
+
+
 * The **Reproduce_Fig_1.py** code outputs a map of the Kanto Basin with the MeSO-net station locations, the JIVSM model, and the four different lines used in this study. The code also plots an azimuthal equidistant projection map centered on the Kanto Basin including all the Mw 6+ earthquakes which occurred within 30 and 95 degrees from the Kanto Basin between May 2017 and 2020.
 
 <img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/Fig_1.png" width=75%>
