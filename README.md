@@ -18,7 +18,7 @@ The manuscript has been submitted for publication, a pre-print version is availa
 ## Example:
 
 * The **Compute_AC_PWS.py** code processes two days of continuous records at the AYMH station and computes the PWS of the 30-min ACFs. For the two days of data, the 20-min ACFs are relatively consistent. Note that we use 1 month of data in the paper. 
-<img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/ACF_example.png" width=50%>
+<div style="text-align:center"><img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/ACF_example.png" width=50%></div>
 
 
 
