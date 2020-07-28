@@ -1,4 +1,4 @@
-# Python codes to compute noise autocorrelation functions (ACFs)
+# Python codes to compute noise autocorrelation functions (ACFs) and image the Kanto Basin, Japan
 
 The manuscript has been submitted for publication, a pre-print version is available here.
 
