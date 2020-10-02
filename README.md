@@ -12,7 +12,7 @@ The manuscript has been submitted for publication, a pre-print version is availa
 * The **Data** folder contains:
   - Four zip files with all the data needed to run the codes and reproduce the figures of the paper. The codes should unzip the zip files automatically.
 
-* The **Figures** folder contains the 7 figures that can be plotted by the 4 codes. 
+* The **Figures** folder contains the 7 figures that can be plotted with the 4 codes. 
 
 
 ## Example:
