@@ -22,6 +22,9 @@ import geopy
 from geopy.distance import  geodesic
 from scipy.interpolate import griddata
 from matplotlib.ticker import  AutoMinorLocator
+import os
+from zipfile import ZipFile
+
 
 #%%
 def butter_bandpass_filter(data, lowcut, highcut, fs, order = 4):
@@ -47,12 +50,18 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order = 4):
     y = filtfilt(b, a, data)
     return y
 
+#%% Extract noise and earthquake ACF from zip file if needed
+directory = '../Data/ACFs/'
+if not os.path.exists(directory):
+    zf = ZipFile('../Data/ACFs.zip', 'r')
+    zf.extractall('../Data/')
+    zf.close()
+
 #%% Directory with all the data and metadata
 data_dir = '../Data/'
 
 #%% Main parameter to plot the data along different Lines
 Line_nb = '1' # Possible values are 1, 2, 3, or 4 (str)
-
 
 #%% Some more parameters
 distlimm = 25  # radius for the station selection to remove the average trace (in km) -> can be changed but will only impact Noise ACF results
@@ -65,7 +74,9 @@ cut2= 1/period1
 delta = 20 # Sampling frequency of the data (in Hz)
 lag_selct = 15*delta # select 15 s of the positive lag of the ACFs
 t = np.linspace(0,lag_selct/delta,lag_selct) # Create a time vector
-
+print('Looking at the stations along Line ' + Line_nb)
+print('The ACFs are bandpass filtered between ' + str(period1) + ' and ' + str(period2) + ' s')
+print('For each noise ACF, the average trace is computed by averaging all the surrounding ACFs within a ' + str(distlimm) + ' km radius' )
 
 #%% Load metadata for MeSOnet stations (station name, latitude, and longitude)
 crs = open(data_dir + "Other_data/MeSOnet_channel_file", "r")
@@ -128,7 +139,7 @@ elif Line_nb == '4':
 #%% Load earthquake ACFs for stations along the line
 datsaviEQ = np.empty((len(station),len(t)) )
 for i in np.arange(len(station)):
-    fileEQ = data_dir +'/ACFs/EQ_ACFs/' + station[i]+ '.SAC'
+    fileEQ = data_dir +'ACFs/EQ_ACFs/' + station[i]+ '.SAC'
     st = read(fileEQ) # Read sac file
     dat1 = st[0].data # get data
     dat1 = dat1 - np.mean(dat1) # Remove the mean
@@ -176,7 +187,7 @@ toposta = griddata((latg,long), topo, (stalatsave,stalonsave), method='cubic')/1
 datALL = np.empty( (len(all_sta),len(t)) )
 for  i in np.arange(len(all_sta)):
     dat2=[]
-    fileAll = data_dir +'/ACFs/Noise_ACFs/' + all_sta[i]+ '_U_corrF_ALL_pws6.mat'
+    fileAll = data_dir +'ACFs/Noise_ACFs/' + all_sta[i]+ '_U_corrF_ALL_pws6.mat'
     data_mat = sio.loadmat(fileAll)  # Load Noise data
     dat1 = np.squeeze(data_mat['AC'])
     dat1 = dat1 - np.mean(dat1)
