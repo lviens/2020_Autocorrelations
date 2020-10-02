@@ -19,7 +19,6 @@ from zipfile import ZipFile
 
 
 #%% Unzip data in needed
-
 directory = '../Data/Travel_times/'
 if not os.path.exists(directory):
     zf = ZipFile('../Data/Travel_times.zip', 'r')
@@ -29,30 +28,20 @@ if not os.path.exists(directory):
 #%%
 Vpth = 2.53 # Vp to migrate ACFs to depth (in km/s)
 
-
-#%% Load Nois ACF travel time
-outputf = directory + 'Noise_ACF_travel_times.mat'
-datN = sio.loadmat(outputf)
-stationN = np.squeeze(datN['station'])  # Station names
-latN = np.squeeze(datN['lat']) # Station latitude
-lonN = np.squeeze(datN['lon']) # Station longitude
-T_PN = np.squeeze(datN['T_P']) # Station JIVSM two-way travel time
-JIVSMbasdepth = np.squeeze(datN['depthbas']) # JIVSM basin depth
-dataPN = np.squeeze(datN['mxpk']) # Load Noise P-wave two-waytravel time
-
-#%% Load earthquake ACF
-input_f = directory + 'EQ_ACF_travel_times.mat'
+#%% Load Noise and Earthquake ACF travel times
+input_f = directory + 'Noise_EQ_ACFs_Travel_times.mat'
 dat = sio.loadmat(input_f)
-station = np.squeeze(dat['station']) # Station names (identical to noise ACFs)
-lat = np.squeeze(dat['lat']) # Station latitude (identical to noise ACFs)
-lon = np.squeeze(dat['lon']) # Station longitude (identical to noise ACFs)
-T_P = np.squeeze(dat['T_P']) # Station JIVSM two-way travel time (identical to noise ACFs)
-dataP = np.squeeze(dat['mxpk']) # Load EQ P-wave two-way travel time
+stationN = np.squeeze(dat['station'])  # Station names
+lat = np.squeeze(dat['lat']) # Station latitude
+lon = np.squeeze(dat['lon']) # Station longitude
+JIVSM_Bdepth = np.squeeze(dat['JIVSM_Bdepth']) # JIVSM basin depth
+dataPN =  np.squeeze(dat['Noise_2p']) # Load Noise P-wave two-waytravel time
+dataP = np.squeeze(dat['Eq_2p']) # Load EQ P-wave two-way travel time
+
 
 #%%
-print('Noise: Nb. of stations removed: ' + str(len(np.squeeze(np.where(np.isnan(dataPN)))) ))
-print('Earthquake: Nb. of stations removed: ' + str(len(np.squeeze(np.where(np.isnan(dataP)))) ))
-
+print('Noise: # of stations removed: ' + str(len(np.squeeze(np.where(np.isnan(dataPN)))) ))
+print('Earthquake: # of stations removed: ' + str(len(np.squeeze(np.where(np.isnan(dataP)))) ))
 
 #%% Migrate data to depth 
 Noisebas = dataPN * Vpth / 2
@@ -91,7 +80,7 @@ fig1 = plt.figure(figsize=(11,14))
 ax2 = fig1.add_subplot(321)
 m.arcgisimage(service = 'World_Shaded_Relief', xpixels = 2000) 
 x, y = m(lon, lat)
-m.scatter(x, y, c = JIVSMbasdepth, marker = 'o', vmin = vminval, vmax = cmaxval, s = 50, cmap = cmap_reversed)
+m.scatter(x, y, c = JIVSM_Bdepth, marker = 'o', vmin = vminval, vmax = cmaxval, s = 50, cmap = cmap_reversed)
 plt.title('JIVSM bedrock depth', fontsize = 13)
 m.drawmapscale(140.75, 35.35, 139, 36, 25, barstyle = 'fancy') # Plot scale
 parallels = np.arange(30,40,.25)
@@ -144,8 +133,8 @@ plt.annotate('(c)', xy = (-.03, 1.05), xycoords = 'axes fraction', fontsize = 14
 ax5 = fig1.add_subplot(325)
 m.arcgisimage(service = 'World_Shaded_Relief', xpixels = 2000)
 x, y = m(lon, lat)
-m.scatter(x, y, c = JIVSMbasdepth - Noisebas, marker ='o', vmin = vminvaldif, vmax = cmaxvaldif, s = 50, cmap = Seismic2, alpha = 1,edgecolors = 'k', linewidths = .1) 
-plt.title('JIVSM minus noise ACF bedrock depth \n $\mu = $' + str(np.round(np.nanmean(JIVSMbasdepth-Noisebas), 3)) + ' km, $\sigma = $' + str(np.round(np.nanstd(JIVSMbasdepth-Noisebas),3)) + ' km', fontsize = 13)
+m.scatter(x, y, c = JIVSM_Bdepth - Noisebas, marker ='o', vmin = vminvaldif, vmax = cmaxvaldif, s = 50, cmap = Seismic2, alpha = 1,edgecolors = 'k', linewidths = .1) 
+plt.title('JIVSM minus noise ACF bedrock depth \n $\mu = $' + str(np.round(np.nanmean(JIVSM_Bdepth-Noisebas), 3)) + ' km, $\sigma = $' + str(np.round(np.nanstd(JIVSM_Bdepth-Noisebas),3)) + ' km', fontsize = 13)
 m.drawmapscale(140.75, 35.35, 139, 36, 25, barstyle = 'fancy') # Plot scale
 parallels = np.arange(30.00, 40.00, .25)
 m.drawparallels(parallels, labels = [False,True,False,False], linewidth = .2, fontsize = 12)
@@ -159,8 +148,8 @@ plt.annotate('(d)', xy = (-.03, 1.05), xycoords = 'axes fraction', fontsize = 14
 ax6 = fig1.add_subplot(326)
 m.arcgisimage(service = 'World_Shaded_Relief', xpixels = 2000)
 x, y = m(lon, lat)
-m.scatter(x,y, c=(JIVSMbasdepth-EQbas),marker='o', vmin = vminvaldif, vmax = cmaxvaldif, s = 50,cmap=Seismic2, alpha = 1,edgecolors= 'k',linewidths = .1) 
-plt.title( 'JIVSM minus earthquake ACF bedrock depth \n $\mu = $' + str(np.round(np.nanmean(JIVSMbasdepth-EQbas),3)) + ' km, $\sigma = $' + str(np.round(np.nanstd(JIVSMbasdepth-EQbas),3)) + ' km', fontsize = 13 )
+m.scatter(x,y, c=(JIVSM_Bdepth-EQbas),marker='o', vmin = vminvaldif, vmax = cmaxvaldif, s = 50,cmap=Seismic2, alpha = 1,edgecolors= 'k',linewidths = .1) 
+plt.title( 'JIVSM minus earthquake ACF bedrock depth \n $\mu = $' + str(np.round(np.nanmean(JIVSM_Bdepth-EQbas),3)) + ' km, $\sigma = $' + str(np.round(np.nanstd(JIVSM_Bdepth-EQbas),3)) + ' km', fontsize = 13 )
 m.drawmapscale(140.75, 35.35, 139, 36, 25, barstyle = 'fancy') # Plot scale
 parallels = np.arange(30.00, 40.00, .25)
 m.drawparallels(parallels, labels = [False,False,False,False], linewidth = .2, fontsize = 12)
