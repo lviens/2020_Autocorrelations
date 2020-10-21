@@ -1,6 +1,6 @@
 # Python codes to compute noise autocorrelation functions (ACFs) and image the Kanto Basin, Japan
 
-The following manuscript has been submitted for publication, a pre-print version is available soon.
+The following manuscript has been submitted for publication, a pre-print version is available [here](https://www.essoar.org/doi/abs/10.1002/essoar.10504543.1).
 - Viens L., C. Jiang, and M. Denolle (submitted 2/10/2020), Imaging the Kanto Basin bedrock with noise and earthquake autocorrelations
 
 ## Description:
