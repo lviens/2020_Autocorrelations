@@ -22,10 +22,11 @@ import os
 from zipfile import ZipFile
 import sys
 import numpy as np
-from scipy.signal import butter, filtfilt, hilbert, hann
+from scipy.signal import butter, filtfilt, hilbert
 from scipy.fftpack import next_fast_len
 from obspy import read as readobs
 import matplotlib.pyplot as plt
+from scipy import signal
 
 
 #%%
@@ -121,26 +122,36 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order =  4):
     return y
 
 
-def ACF_func(data, dt, timesave):
+def ACF_func(data, delta, filter_low, filter_high, ctaper, smoothN, timesave):
     '''
     Compute autocorrelation functions in the frequency domain
     
     PARAMETERS:
     ---------------------
-    dat: time series (numpy.ndarray)
-    dt: sampling rate of time series in second (float)
+    data: time series (numpy.ndarray)
+    delta: sampling frequency of time series in Hz (float)
+    filter_low: Lower cutoff frequency (in Hz)
+    filter_high: Upper cutoff frequency (in Hz)
     timesave: lag time to save for the ACF
     RETURNS:
     ---------------------
     corr: autocorrelation function of time series data in the time domain (numpy.ndarray)
     '''
     n = len(data)  # define the length of the data
-    delta = 1/dt # Sampling frequency of the data (in Hz)
-    fft_r = np.fft.fft(data, n*4) # FFT with zero-padding
-    cc_t1 = np.real(np.fft.ifft( (fft_r * np.conj(fft_r)) )) # Compute Autocorrelation
-    corr2 = np.concatenate((cc_t1[int(len(cc_t1)/2):], cc_t1[:int(len(cc_t1)/2)])) # Shift the causal and anticausal ACFs to their right positions (does not really matter for ACFs as they are symmetric)
-    corr  = corr2[int(len(corr2)/2-timesave*delta):int(len(corr2)/2+timesave*delta)] # Only select a few seconds (set by the timesave variable) for both the anticausal and causal parts
+    Nfft = int(next_fast_len(4*n))
+    Nfft2= Nfft//2
+    spec = np.fft.fft(data, Nfft) # return FFT
+    
+    temp  = moving_ave(np.abs(spec),smoothN)
+    tindx = np.where(temp<1e-8)
+    sfft1 = spec*np.conj(spec)/(temp*temp)
+    sfft1[tindx] = 0
+    tdata = np.real(np.fft.ifftshift(np.fft.ifft(sfft1, Nfft, axis=0)))[Nfft2:Nfft2+timesave*delta]
+    tdata[:len(ctaper)] *=ctaper
+    tdata[-len(ctaper):] *=ctaper[::-1]
+    corr = butter_bandpass_filter(tdata,lowcut=filter_low,highcut= filter_high, fs=delta,order=4)
     return corr
+
 
 #%%
 dir_ini = './'
@@ -158,21 +169,22 @@ year = '2019'
 dy = ["%.3d" % i for i in range(182,184)] # Compute 20-min ACFs over 2 days of data (July 1st to 2nd, 2019)
 
 cmpo1 = 'U' # Vertical component
-timesave = 20 # save ACFs from -timesave to +timesave (in seconds)
-len_min = 20 # Duration of the raw record to consider (in minutes)
-len_time_win = (3600) / (len_min*60) # To split each 1-h time series into three 20-min time series
+timesave = 15 # save ACFs from -timesave to +timesave (in seconds)
+len_min = 2 # noise window length (in min)
+len_fin2 = str(len_min).zfill(3)
 
+len_time_win = (3600*20)/ (len_min*60*20)
 # Filter  parameters
 filtlow = 0.1 #  Lower cutoff frequency (in Hz)
 filthigh = 1 # Upper cutoff frequency (in Hz)
 
+#%% Taper and smoothing parameters
+taperlen = .5
+smoothN = 30
+
 #%% Parameter of the PWS
 pwer = 2 # Power of the PWS
 pws_timegate = .1 # Time gate to perfom some smoothing (in seconds)
-
-#%% Taper parameter for the ACFs before filtering 
-hann2 = hann(41) # 40 sample -> 2 s given the 20 Hz sampling frequency
-half_len =round(len(hann2)/2-.001)+1 # half taper: 1 s
 
 #%% Loop to read all the 1-h MeSO-net data (20 Hz sampling frequency) and compute ACFs
 for rec in sta: # Loop over the stations
@@ -186,13 +198,18 @@ for rec in sta: # Loop over the stations
             dat_r1.detrend(type='constant') # Remove mean
             dat_r1.detrend(type='linear') # Remove trend
             dt = round(dat_r1[0].stats.delta,3) # Get dt sampling rate in seconds
+            delta =round(1/dt)
             dat_r = dat_r1[0].data # get data
             
+            hann2 = signal.hann(int(delta*taperlen)*2+1)
+            half_len = round(len(hann2)/2-.001)+1
+            ctaper = hann2[:half_len]
             if len(dat_r)==round(1/dt*3600): # Check if there is no problem with the 1-H time series
                 a = np.split(dat_r1[0].data, len_time_win) # Split the 1-h time series into a 20-min time series
                 for ab in a: # Loop over each of the 20-min time series
                     ab = ab - np.mean(ab) # Remove mean
-                    corr = ACF_func(ab, dt, timesave) # Compute ACFs
+                    corr = ACF_func(ab, delta, filtlow, filthigh, ctaper, smoothN, timesave) # Compute ACFs
+               
                     ZZcorr.append(corr) # Save the ACF in a list
 
  #%% Compute PWS for the ACFs in ZZcorr
@@ -213,20 +230,21 @@ for rec in sta: # Loop over the stations
 
 
 #%% Plot the data
-    t = np.linspace(-len(ZZcorrf)/2*1/delta,len(ZZcorrf)/2*1/delta, len(ZZcorrf)) # Time vector for the ACFs
+    clim = np.max(abs(data_F))/4
+    t = np.linspace(0,len(ZZcorrf)*1/delta, len(ZZcorrf)) # Time vector for the ACFs
     
-    plt.figure(figsize =(6,7))
+    fig = plt.figure(figsize =(6,7))
     plt.subplot(211)
     plt.imshow(data_F, aspect = 'auto', extent = (t[0], t[-1], data_F.shape[0] ,0) )
-    plt.clim((-np.max(data_F)/100, np.max(data_F)/100)) # Amplitude clipping
+    plt.clim((-clim, clim)) # Amplitude clipping
     plt.xlabel('Time (s)')
     plt.ylabel('ACF #')
-    plt.title(rec[2:] +' station\n20-min vertical ACFs (Filter: ' + str(filtlow) + '-' + str(filthigh) + ' Hz)'  )
+    plt.title(rec[2:] +' station\n' + str(len_min) +'-min vertical ACFs (Filter: ' + str(filtlow) + '-' + str(filthigh) + ' Hz)'  )
     plt.grid(linewidth = 0.5)
     
     plt.subplot(212)
     plt.plot(t, ZZcorrf, linewidth =2)
-    plt.xlim(-timesave,timesave)
+    plt.xlim(0,timesave)
     plt.xlabel('Time (s)')
     plt.ylabel('Amplitude')
     plt.title( 'Stacked ACF')
@@ -234,3 +252,4 @@ for rec in sta: # Loop over the stations
     
     plt.tight_layout()
     plt.show()
+    fig.savefig('../Figures/ACF_example.png', dpi = 100)
