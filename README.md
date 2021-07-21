@@ -32,7 +32,7 @@ The following manuscript has been submitted for publication, a pre-print version
 
 * The **Reproduce_Fig_2.py** code is used to plot the noise and earthquake ACFs along the 3 lines. The Figure below shows the ACFs along Line 1. 
 <p align="center">
-<img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/Fig_2_Line_2.png" width=60%>
+<img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/Fig_2_Line_1.png" width=60%>
 </p>
 
 * The **Reproduce_Fig_3.py** code compares the bedrock depths from the JIVSM, noise ACF, and earthquake ACF measurements. 
