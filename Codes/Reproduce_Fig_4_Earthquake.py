@@ -99,7 +99,7 @@ if not os.path.exists(directory):
     
 #%% Extract noise and earthquake ACF from zip file if needed
 directoryAxi = '../Data/Axitra/'
-if not os.path.exists(directory):
+if not os.path.exists(directoryAxi):
     zf = ZipFile('../Data/Axitra.zip', 'r')
     zf.extractall('../Data/')
     zf.close()
