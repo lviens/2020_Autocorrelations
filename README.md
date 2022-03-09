@@ -37,7 +37,7 @@ The codes are for the following manuscript:
 
 * The **Reproduce_Fig_4.py** code compares the bedrock depths from the JIVSM, noise ACF, and earthquake ACF measurements. 
 <p align="center">
-<img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/Figure_4.png" width=60%>
+<img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/Fig_4.png" width=60%>
 </p>
 
 * The **Reproduce_Fig_8.py** code shows a comparison of the Axitra ACF simulations with the observed earthquake and noise ACFs. 
