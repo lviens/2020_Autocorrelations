@@ -242,4 +242,4 @@ ax3.set_position([0.535, .325, .44, .44])
 ax6.set_position([0.02, .0075, .44, .44])
 ax5.set_position([0.535, .0075, .44, .44])
 
-fig1.savefig('../Figures/Fig_3.png', dpi = 100)
+fig1.savefig('../Figures/Figure_4.png', dpi = 100)
