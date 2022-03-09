@@ -1,7 +1,7 @@
 # Python codes to compute noise autocorrelation functions (ACFs) and image the Kanto Basin, Japan
 
 The codes are for the following manuscript:
-- Viens L., C. Jiang, and M. Denolle (Submitted to GJI), Imaging the Kanto Basin bedrock with earthquake and noise autocorrelation functions
+- Viens L., C. Jiang, and M. Denolle (Accepted in GJI), Imaging the Kanto Basin bedrock with earthquake and noise autocorrelation functions
 
 ## Description:
 * The **Codes** folder contains:
@@ -40,7 +40,7 @@ The codes are for the following manuscript:
 <img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/Fig_3.png" width=60%>
 </p>
 
-* The **Reproduce_Fig_4_Noise.py** and **Reproduce_Fig_4_Earthquake.py** codes show a comparison of the Axitra ACF simulations with the observed earthquake and noise ACFs. 
+* The **Reproduce_Fig_8.py** code shows a comparison of the Axitra ACF simulations with the observed earthquake and noise ACFs. 
 <p align="center">
-<img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/Fig_4_Line_1_Earthquake.png" width=60%>
+<img src="https://github.com/lviens/2020_Autocorrelations/blob/master/Figures/Fig_8_Line_1.png" width=60%>
 </p>
