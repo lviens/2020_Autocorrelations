@@ -4,7 +4,7 @@
 Created on Fri Jul 10 11:13:47 2021
 
 @author: Loic Viens
-Code to reproduce Figure 3 of Viens et al. (Submitted to GRL).
+Code to reproduce Figure 4 of Viens et al. (2022, GJI).
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
