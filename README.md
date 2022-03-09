@@ -6,9 +6,9 @@ The codes are for the following manuscript:
 ## Description:
 * The **Codes** folder contains:
   - **Compute_AC_PWS.py** to compute noise ACFs from the raw MeSO-net data and stack them with the Phase Weighted Stack (PWS, [Schimmel and Paulssen, 1997](https://academic.oup.com/gji/article/130/2/497/760640)) method (2 days of data at the AYMH station are in the E.AYHM.zip file in the **Data** folder).
-  - **Reproduce_Fig_1.py** to reproduce Figure 1 (Map of the Kanto Basin).
+  - **Reproduce_Fig_1.py** to reproduce Figure 1 (Map of the Kanto Basin, requires Basemap).
   - **Reproduce_Fig_3.py** to reproduce Figure 3 of the paper (Noise and earthquake ACF plots).
-  - **Reproduce_Fig_4.py** to reproduce Figure 4 of the paper (Maps of the Kanto Basin basin depth).
+  - **Reproduce_Fig_4.py** to reproduce Figure 4 of the paper (Maps of the Kanto Basin basin depth, requires Basemap).
   - **Reproduce_Fig_8.py** to reproduce the Figure 8 of the paper (Axitra simulated ACFs vs observed ACFs).
 
 * The **Data** folder contains:
