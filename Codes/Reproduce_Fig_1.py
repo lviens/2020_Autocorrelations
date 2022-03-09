@@ -4,7 +4,7 @@
 Created on Thu Jun 11 10:23:26 2021
 
 @author: Loic Viens
-Codes to reproduce the maps of Figure 1 (Viens et al., Submitted to GRL)
+Codes to reproduce the maps of Figure 1 of Viens et al. (2022, GJI) 
 The Figure is saved in the "Figures" folder.
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
