@@ -4,7 +4,7 @@
 Created on Thu Jun 11 10:23:26 2021
 
 @author: Loic Viens
-Codes to reproduce the maps of Figure 1 of Viens et al. (2022, GJI) 
+Codes to reproduce the maps of Figure 1 (Viens et al., Submitted to GRL)
 The Figure is saved in the "Figures" folder.
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -200,9 +200,22 @@ for lnb in range(1,4):
 
 #%% Set ticks
 parallels = np.arange(33, 38, .25)
-m.drawparallels(parallels, labels=[False,True,False,False], linewidth = .15, fontsize = 12)
+m.drawparallels(parallels, labels=[False,True,False,False], linewidth = 0, fontsize = 12)
 meridians = np.arange(138, 142, .5)
-m.drawmeridians(meridians, labels=[False,False,False,True], linewidth = .15, fontsize = 12)
+m.drawmeridians(meridians, labels=[False,False,False,True], linewidth = 0, fontsize = 12)
+lon_ticks_proj, _=m(np.arange(139,141.5,.5), np.zeros(len(np.arange(139,141.5,.5))))
+_, lat_ticks_proj=m(np.zeros(len(np.arange(35.25,36.25,.25))), np.arange(35.25,36.25,.25))
+# manually add ticks
+ax0.set_xticks(lon_ticks_proj)
+ax0.set_yticks(lat_ticks_proj)
+ax0.tick_params(axis='both',which='major')
+# add ticks to the opposite side as well
+ax0.xaxis.set_ticks_position('both')
+ax0.yaxis.set_ticks_position('both')
+# remove the tick labels
+ax0.xaxis.set_ticklabels([])
+ax0.yaxis.set_ticklabels([])
+
 
 # Plot contour of the Kanto Basin
 xx, yy = m(long1, latg1)
@@ -230,11 +243,14 @@ cb.ax.set_yticklabels([1 ,2,3,4,5], fontsize = 12)
 #%% Plot the inset map
 ax1 = fig1.add_subplot(312)
 m2.drawcoastlines()
+    
+m2.arcgisimage(service='Ocean_Basemap', xpixels = 1000)
+
 
 parallels = np.arange(30, 50, 5)
-m2.drawparallels(parallels, labels = [False,False,False,False], linewidth = .2, fontsize = 12)
+m2.drawparallels(parallels, labels = [False,False,False,False], linewidth = 0, fontsize = 12)
 meridians = np.arange(125, 150, 5)
-m2.drawmeridians(meridians, labels = [False,False,False,False], linewidth = .2, fontsize = 12)
+m2.drawmeridians(meridians, labels = [False,False,False,False], linewidth = 0, fontsize = 12)
 
 # Plot red rectangle around the Kanto Basin
 w,o = m2((west ,west),(south, north))
@@ -246,17 +262,10 @@ m2.plot(w, o, 'r')
 w,o = m2((east ,west),(south, south))
 m2.plot(w, o, 'r')
 
-# Plot Plate boundaries
-xp, yp = m2(ln, lt)
-m2.plot(xp, yp, 'grey' )
-xp2, yp2 = m2(ln2, lt2)
-m2.plot(xp2, yp2, 'grey' )
-xp, yp = m2(135.4, 30.4)
-plt.text(xp, yp, 'Philippine\nSea Plate',FontSize = 8)
-xp, yp = m2(142.7, 33.6)
-plt.text(xp, yp, 'Pacific\n Plate',FontSize = 8)
-xp, yp = m2(135, 39)
-plt.text(xp, yp, 'Japan', FontSize = 9)
+xp, yp = m2(133, 40)
+plt.text(xp, yp, 'Japan', FontSize = 11, bbox=dict( facecolor='w', alpha=0.4, edgecolor ='w', boxstyle='round'))
+for axis in ['top','bottom','left','right']:
+    ax1.spines[axis].set_linewidth(1.5)
 
 
 #%% Subplot Figure 1b
