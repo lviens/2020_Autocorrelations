@@ -5,7 +5,7 @@ Created on Wed Jul  8 16:14:44 2021
 
 @author: Loic Viens
 
-Code to reproduce the Figure 2 of Viens et al. (Submitted to GRL). 
+Code to reproduce the Figure 3 of Viens et al. (2022, GJI) 
 The station Line number (1-3) can be changed line 36. 
 Some more parameters can be changed lines 70-77, but will only affect the noise ACF results.
 More parameters in the code can be changed and have a "can be changed" comment next to them.
