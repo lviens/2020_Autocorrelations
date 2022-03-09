@@ -4,6 +4,7 @@
 Created on Wed Mar  9 15:37:11 2022
 
 @author: lviens
+Code to reproduce Figure 8 of Viens et al. (2022, GJI).
 """ 
 import os
 import geopy
