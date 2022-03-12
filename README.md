@@ -1,7 +1,7 @@
 # Python codes to compute earthquake and noise autocorrelation functions (ACFs) to image the Kanto Basin, Japan
 
 The codes are for the following manuscript:
-- Viens L., C. Jiang, and M. Denolle (Accepted in GJI), Imaging the Kanto Basin seismic basement with earthquake and noise autocorrelation functions (link to the paper coming soon)
+- Viens L., C. Jiang, and M. Denolle (2022), Imaging the Kanto Basin seismic basement with earthquake and noise autocorrelation functions, Geophys. J. Int., [doi:10.1093/gji/ggac101]( https://doi.org/10.1093/gji/ggac101)
 
 ## Description:
 * The **Codes** folder contains:
