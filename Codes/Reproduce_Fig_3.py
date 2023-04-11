@@ -535,6 +535,6 @@ pos1 = axs4.get_position() # get the original position
 pos2 = [pos1.x0, pos1.y0 + -0.075, pos1.width, pos1.height+0.02] 
 axs4.set_position(pos2) # set a new position
 
-
+plt.show()
 figo.savefig('../Figures/Figure_3_Line_' + Line_nb + '.png', dpi = 100)
 
